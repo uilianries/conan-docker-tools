@@ -1,5 +1,6 @@
 stages:
-- stage: Base images
+- stage: base
+  displayName: Base Images
   jobs:
   - job: Docker
     pool:
@@ -109,7 +110,8 @@ stages:
         Conan Server:
           BUILD_CONAN_SERVER_IMAGE: 1
 
-- stage: Specilized images
+- stage: specilized
+  displayName: Specilized Images
   jobs:
   - job: Docker
     pool:
