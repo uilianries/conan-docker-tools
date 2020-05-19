@@ -14,5 +14,4 @@ jobs:
       - name: GCC 10
         env:
           GCC_VERSIONS: 10
-          DOCKER_ARCHS: x86_x64
         run: python build.py
