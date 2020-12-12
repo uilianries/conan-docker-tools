@@ -462,10 +462,10 @@ class ConanDockerTools(object):
     def run(self):
         """Execute all 3 stages for all versions in compilers list
         """
-        self.process_regular_images()
+        #self.process_regular_images()
         self.process_distro_images()
-        self.process_conan_server()
-        self.process_conan_tests()
+        #self.process_conan_server()
+        #self.process_conan_tests()
 
 
 if __name__ == "__main__":

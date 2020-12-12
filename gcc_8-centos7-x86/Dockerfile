@@ -3,15 +3,15 @@ ENTRYPOINT ["linux32", "--"]
 
 LABEL maintainer="Luis Martinez de Bartolome <luism@jfrog.com>"
 
-ENV PATH=/opt/pyenv/shims:/opt/rh/devtoolset-7/root/usr/bin:${PATH:+:${PATH}} \
-    MANPATH=/opt/rh/devtoolset-7/root/usr/share/man${MANPATH:+:${MANPATH}} \
-    INFOPATH=/opt/rh/devtoolset-7/root/usr/share/info${INFOPATH:+:${INFOPATH}} \
-    PCP_DIR=/opt/rh/devtoolset-7/root \
-    PERL5LIB=/opt/rh/devtoolset-7/root//usr/lib64/perl5/vendor_perl:/opt/rh/devtoolset-7/root/usr/lib/perl5:/opt/rh/devtoolset-7/root//usr/share/perl5/vendor_perl${PERL5LIB:+:${PERL5LIB}} \
-    LD_LIBRARY_PATH=/opt/rh/devtoolset-7/root/usr/lib64:/opt/rh/devtoolset-7/root/usr/lib:/opt/rh/devtoolset-7/root/usr/lib64/dyninst:/opt/rh/devtoolset-7/root/usr/lib/dyninst${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}} \
+ENV PATH=/opt/pyenv/shims:/opt/rh/devtoolset-8/root/usr/bin:${PATH:+:${PATH}} \
+    MANPATH=/opt/rh/devtoolset-8/root/usr/share/man${MANPATH:+:${MANPATH}} \
+    INFOPATH=/opt/rh/devtoolset-8/root/usr/share/info${INFOPATH:+:${INFOPATH}} \
+    PCP_DIR=/opt/rh/devtoolset-8/root \
+    PERL5LIB=/opt/rh/devtoolset-8/root//usr/lib64/perl5/vendor_perl:/opt/rh/devtoolset-8/root/usr/lib/perl5:/opt/rh/devtoolset-8/root//usr/share/perl5/vendor_perl${PERL5LIB:+:${PERL5LIB}} \
+    LD_LIBRARY_PATH=/opt/rh/devtoolset-8/root/usr/lib64:/opt/rh/devtoolset-8/root/usr/lib:/opt/rh/devtoolset-8/root/usr/lib64/dyninst:/opt/rh/devtoolset-8/root/usr/lib/dyninst${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}} \
     PYENV_ROOT=/opt/pyenv \
-    CXX=/opt/rh/devtoolset-7/root/usr/bin/g++ \
-    CC=/opt/rh/devtoolset-7/root/usr/bin/gcc
+    CXX=/opt/rh/devtoolset-8/root/usr/bin/g++ \
+    CC=/opt/rh/devtoolset-8/root/usr/bin/gcc
 
 COPY cloudlinux.repo /etc/yum.repos.d/cloudlinux.repo
 
@@ -35,7 +35,7 @@ RUN printf "i686" >  /etc/yum/vars/arch \
        curl \
        xz-devel \
        tar \
-       devtoolset-7-toolchain \
+       devtoolset-8-toolchain \
        zlib-devel \
        bzip2 \
        bzip2-devel \
@@ -50,33 +50,34 @@ RUN printf "i686" >  /etc/yum/vars/arch \
        autoconf-archive \
        gettext \
        libcurl-devel \
+       perl-Thread-Queue.noarch \
     && yum clean all \
-    && wget -O /tmp/git-2.22.0.tar.gz --no-check-certificate --quiet https://www.kernel.org/pub/software/scm/git/git-2.22.0.tar.gz \
-    && tar -zxf /tmp/git-2.22.0.tar.gz -C /tmp \
-    && pushd /tmp/git-2.22.0 \
+    && wget -O /tmp/git-2.29.2.tar.gz --no-check-certificate --quiet https://www.kernel.org/pub/software/scm/git/git-2.29.2.tar.gz \
+    && tar -zxf /tmp/git-2.29.2.tar.gz -C /tmp \
+    && pushd /tmp/git-2.29.2 \
     && ./configure --prefix=/usr --without-tcltk --with-curl \
     && make -s \
     && make install \
     && yum remove -y gettext libcurl-devel \
     && popd \
     && rm -rf /tmp/git-* \
-    && wget -O /tmp/autoconf-2.69.tar.gz --no-check-certificate --quiet https://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz \
-    && tar -zxf /tmp/autoconf-2.69.tar.gz -C /tmp \
-    && pushd /tmp/autoconf-2.69 \
+    && wget -O /tmp/autoconf-2.70.tar.gz --no-check-certificate --quiet https://ftp.gnu.org/gnu/autoconf/autoconf-2.70.tar.gz \
+    && tar -zxf /tmp/autoconf-2.70.tar.gz -C /tmp \
+    && pushd /tmp/autoconf-2.70 \
     && ./configure --prefix=/usr \
     && make -s \
     && make install \
     && popd \
-    && rm -rf /tmp/autoconf-2.69* \
-    && wget -O /tmp/automake-1.16.tar.gz --no-check-certificate --quiet https://ftp.gnu.org/gnu/automake/automake-1.16.tar.gz \
-    && tar -zxf /tmp/automake-1.16.tar.gz -C /tmp \
-    && pushd /tmp/automake-1.16 \
+    && rm -rf /tmp/autoconf-2.70* \
+    && wget -O /tmp/automake-1.16.3.tar.gz --no-check-certificate --quiet https://ftp.gnu.org/gnu/automake/automake-1.16.3.tar.gz \
+    && tar -zxf /tmp/automake-1.16.3.tar.gz -C /tmp \
+    && pushd /tmp/automake-1.16.3 \
     && ./configure --prefix=/usr \
     && sed -i "s/'none';/'reduce';/g" bin/automake.in \
     && make -s \
     && make install \
     && popd \
-    && rm -rf /tmp/automake-1.16* \
+    && rm -rf /tmp/automake-1.16.3* \
     && wget --quiet -O /tmp/OpenSSL_1_0_2q.tar.gz https://github.com/openssl/openssl/archive/OpenSSL_1_0_2q.tar.gz \
     && tar zxf /tmp/OpenSSL_1_0_2q.tar.gz -C /tmp \
     && pushd /tmp/openssl-OpenSSL_1_0_2q \
@@ -116,8 +117,8 @@ RUN printf "i686" >  /etc/yum/vars/arch \
     && find /opt/pyenv -iname __pycache__ -print0 | xargs -0 rm -rf
 
 # Fix sudo with arguments: https://bugzilla.redhat.com/show_bug.cgi?id=1319936
-COPY sudo /opt/rh/devtoolset-7/root/usr/bin/sudo
-RUN chmod a+x /opt/rh/devtoolset-7/root/usr/bin/sudo
+COPY sudo /opt/rh/devtoolset-8/root/usr/bin/sudo
+RUN chmod a+x /opt/rh/devtoolset-8/root/usr/bin/sudo
 
 USER conan
 WORKDIR /home/conan

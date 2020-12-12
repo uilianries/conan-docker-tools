@@ -29,4 +29,4 @@ done
 if [ "$sudo_options" == "" ]; then
     sudo_options="-E"
 fi
-exec /usr/bin/sudo $sudo_options LD_LIBRARY_PATH=$LD_LIBRARY_PATH PATH=$PATH scl enable devtoolset-7 "$cmd_options"
+exec /usr/bin/sudo $sudo_options LD_LIBRARY_PATH=$LD_LIBRARY_PATH PATH=$PATH scl enable devtoolset-8 "$cmd_options"

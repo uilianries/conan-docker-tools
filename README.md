@@ -45,6 +45,8 @@ GCC>=5 is ABI compatible for minor versions. To solve multiple minors, there are
 | [conanio/gcc7: gcc 7](https://hub.docker.com/r/conanio/gcc7/)                      | x86_64  |  Supported           |
 | [conanio/gcc7-centos6: gcc 7](https://hub.docker.com/r/conanio/gcc7-centos6/)      | x86_64  |  Supported           |
 | [conanio/gcc7-centos6-x86: gcc 7](https://hub.docker.com/r/conanio/gcc7-centos6-x86/) | x86  |  Supported           |
+| [conanio/gcc8-centos7: gcc 8](https://hub.docker.com/r/conanio/gcc8-centos7/)      | x86_64  |  Supported           |
+| [conanio/gcc8-centos7-x86: gcc 8](https://hub.docker.com/r/conanio/gcc8-centos7-x86/) | x86  |  Supported           |
 | [conanio/gcc7-mingw: gcc 7](https://hub.docker.com/r/conanio/gcc7-mingw/)          | x86_64  |  Supported           |
 | [conanio/gcc7-armv7: gcc 7](https://hub.docker.com/r/conanio/gcc7-armv7/)          | armv7   |  Supported           |
 | [conanio/gcc7-armv7hf: gcc 7](https://hub.docker.com/r/conanio/gcc7-armv7hf/)      | armv7hf |  Supported           |
@@ -114,6 +116,10 @@ Conan Docker Tools provides an image version with only Conan Server installed, v
 **conanio/gcc7-centos6** is a special image version based on CentOS 6, GCC 7 and **glibc 2.12** (very old glibc version). This is intended to build executables that run almost on any Linux because **glibc** guarantees backward compatibility. You can use this image to build your Conan build tools packages (`build_requires`). This image is **ONLY** able to build **x86_64** binaries.
 
 **conanio/gcc7-centos6-x86** is a special image version based on CentOS 6 i386, GCC 7 and **glibc 2.12** (very old glibc version). This is intended to build executables that run almost on any Linux because **glibc** guarantees backward compatibility. You can use this image to build your Conan build tools packages (`build_requires`). This image is **ONLY** able to build **x86** binaries.
+
+**conanio/gcc8-centos7** is a special image version based on CentOS 7, GCC 8 and **glibc 2.17** (very old glibc version). This is intended to build executables that run almost on any Linux because **glibc** guarantees backward compatibility. You can use this image to build your Conan build tools packages (`build_requires`). This image is **ONLY** able to build **x86_64** binaries.
+
+**conanio/gcc8-centos7-x86** is a special image version based on CentOS 7 i386, GCC 8 and **glibc 2.17** (very old glibc version). This is intended to build executables that run almost on any Linux because **glibc** guarantees backward compatibility. You can use this image to build your Conan build tools packages (`build_requires`). This image is **ONLY** able to build **x86** binaries.
 
 Use the images to test your C++ project in Travis CI
 ======================================================
@@ -202,6 +208,8 @@ If you use Jenkins to build your packages and also you use Jenkins Slave to run 
 | [conanio/gcc10-jnlp-slave: gcc 10](https://hub.docker.com/r/conanio/gcc10-jnlp-slave/)        | x86_64  |  Supported |
 | [conanio/gcc7-jnlp-slave-centos6: gcc 7](https://hub.docker.com/r/conanio/gcc7-jnlp-slave-centos6/)        | x86_64  |  Supported |
 | [conanio/gcc7-jnlp-slave-centos6-x86: gcc 7](https://hub.docker.com/r/conanio/gcc7-jnlp-slave-centos6-x86/)  | x86  |  Supported |
+| [conanio/gcc8-jnlp-slave-centos7: gcc 8](https://hub.docker.com/r/conanio/gcc8-jnlp-slave-centos7/)        | x86_64  |  Supported |
+| [conanio/gcc8-jnlp-slave-centos7-x86: gcc 8](https://hub.docker.com/r/conanio/gcc8-jnlp-slave-centos7-x86/)  | x86  |  Supported |
 
 
 #### Clang
