@@ -6,6 +6,6 @@ import pytest
 class TestGccCompiler:
 
     def test_version(self, container):
-        out, _ = container.exec(['gcc', '-version'])
+        out, _ = container.exec(['gcc', '--version'])
         assert out == 'all'
 

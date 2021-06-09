@@ -6,6 +6,6 @@ import pytest
 class TestClangCompiler:
 
     def test_version(self, container):
-        out, _ = container.exec(['clang', '-version'])
-        assert out == 'all'
+        out, err = container.exec(['clang', '--version'])
+        assert err == 'all'
 

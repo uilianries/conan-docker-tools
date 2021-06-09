@@ -10,11 +10,14 @@ class DockerContainer:
         self.name = str(uuid.uuid4())
     
     def run(self):
-        mount_volume = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
-        subprocess.check_call(["docker", "run", "-t", "-d", "-v", f"{mount_volume}:/tmp/project", "--name", self.name, self.image])
+        mount_volume = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'workingdir'))
+        subprocess.check_call(["docker", "run", "-t", "-d", "-v", f"{mount_volume}:/tmp/workingdir", "--name", self.name, self.image])
     
-    def exec(self, bash_commands: list):
-        args = ["docker", "exec", self.name, "/bin/bash"] + bash_commands
+    def bash(self, bash_commands: list):
+        return self.exec(['/bin/bash', ] + bash_commands)
+
+    def exec(self, commands: list):
+        args = ["docker", "exec", self.name] + commands
         process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
         return stdout.decode('utf-8'), stderr.decode('utf-8')
