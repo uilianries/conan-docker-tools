@@ -1,3 +1,5 @@
+import os
+
 import pytest
 
 docker_compose_services = ['base', 'builder', 'deploy', 'jenkins']
@@ -11,6 +13,8 @@ pytest_plugins = [
 def pytest_addoption(parser):
     parser.addoption("--image", action="store", required=True)
     parser.addoption("--service", action="store", choices=docker_compose_services)
+    parser.addoption("--env-file", action="store", default=os.path.realpath(os.path.join(os.path.dirname(__file__), '..', '.env')),
+                     help="Path to the envfile used to generate the docker images")
 
 
 def pytest_configure(config):

@@ -1,9 +1,5 @@
-
 # Tests for Python
 
-def test_python_version(container):
+def test_python_version(container, expected):
     output, _ = container.exec(['python', '--version'])
-    assert output.rstrip() == 'Python 3.6'  # Forced by Conan tribe.
-
-
-# TODO: x86 version?
+    assert output.rstrip() == f'Python {expected.python}'

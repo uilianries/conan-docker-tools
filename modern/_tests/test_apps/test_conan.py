@@ -1,5 +1,5 @@
 from fixtures.expected import Expected
-# Tests for the Conan client
+
 
 def test_conan_version(container, expected: Expected):
     output, _ = container.exec(['conan', '--version'])
