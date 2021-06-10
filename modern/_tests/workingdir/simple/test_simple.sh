@@ -2,18 +2,13 @@
 
 set -ex
 
-mkdir -p /tmp/build
-rm -rf /tmp/build/*
+mkdir -p /tmp/build/simple
+rm -rf /tmp/build/simple/*
 
-pushd /tmp/build
+pushd /tmp/build/simple
 
-cmake ../workingdir/simple -DCMAKE_BUILD_TYPE=Release
+cmake /tmp/workingdir/simple -DCMAKE_BUILD_TYPE=Release
 cmake --build .
 
 ./example-c
 ./example-cpp
-
-if [ -f /usr/local/bin/clang ]; then
-    ./example-c-clang
-    ./example-cpp-clang
-fi

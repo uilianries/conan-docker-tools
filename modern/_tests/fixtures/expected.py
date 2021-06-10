@@ -36,7 +36,7 @@ def expected(request) -> Expected:
     image = request.config.option.image
 
     # TODO: Improve parsing
-    distro = Distro('ubuntu', Version('16', '04'))
+    distro = Distro('xenial', Version('16', '04'))
 
     compiler_name = 'gcc' if 'gcc' in image else 'clang'
     compiler_version = '11'

@@ -1,18 +1,26 @@
-import pytest
-import subprocess
-import uuid
 import os
+import subprocess
+import tempfile
+import uuid
+
+import pytest
 
 
 class DockerContainer:
-    def __init__(self, image):
+    def __init__(self, image, tmpfolder=None):
         self.image = image
         self.name = str(uuid.uuid4())
-    
+        self._tmpfolder = tmpfolder
+        self.tmp = '/tmp/build'
+
     def run(self):
         mount_volume = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'workingdir'))
-        subprocess.check_call(["docker", "run", "-t", "-d", "-v", f"{mount_volume}:/tmp/workingdir", "--name", self.name, self.image])
-    
+        args = ["docker", "run", "-t", "-d", "-v", f"{mount_volume}:/tmp/workingdir"]
+        if self._tmpfolder:
+            args += ["-v", f"{self._tmpfolder}:{self.tmp}"]
+        args += ["--name", self.name, self.image]
+        subprocess.check_call(args)
+
     def bash(self, bash_commands: list):
         return self.exec(['/bin/bash', ] + bash_commands)
 
@@ -27,13 +35,13 @@ class DockerContainer:
         subprocess.check_call(["docker", "rm", "-f", self.name])
 
 
-
 @pytest.fixture(scope="session")
 def container(pytestconfig):
     image = pytestconfig.getoption("image")
-    container = DockerContainer(image)
-    try:
-        container.run()
-        yield container
-    finally:
-        container.stop()
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        container = DockerContainer(image, tmpdirname)
+        try:
+            container.run()
+            yield container
+        finally:
+            container.stop()
