@@ -2,6 +2,7 @@ import os
 import subprocess
 import tempfile
 import uuid
+from contextlib import contextmanager
 
 import pytest
 
@@ -35,13 +36,19 @@ class DockerContainer:
         subprocess.check_call(["docker", "rm", "-f", self.name])
 
 
+@contextmanager
+def run_container(image, tmpdirname):
+    container = DockerContainer(image, tmpdirname)
+    try:
+        container.run()
+        yield container
+    finally:
+        container.stop()
+
+
 @pytest.fixture(scope="session")
 def container(pytestconfig):
     image = pytestconfig.getoption("image")
     with tempfile.TemporaryDirectory() as tmpdirname:
-        container = DockerContainer(image, tmpdirname)
-        try:
-            container.run()
+        with run_container(image, tmpdirname) as container:
             yield container
-        finally:
-            container.stop()

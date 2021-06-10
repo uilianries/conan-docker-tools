@@ -1,5 +1,5 @@
 import pytest
-from fixtures.container import DockerContainer
+from fixtures.container import run_container
 
 
 @pytest.mark.service('deploy')
@@ -10,13 +10,9 @@ def test_simple(container, expected):
 
     # Check we can run these executables in vanilla image
     vanilla_img = f"ubuntu:{expected.distro.name}"
-    vanilla = DockerContainer(image=vanilla_img, tmpfolder=container._tmpfolder)
-    try:
-        vanilla.run()
+    with run_container(vanilla_img, tmpdirname=container._tmpfolder) as vanilla:
         out, _ = vanilla.exec(['./tmp/build/simple/example-c'])
         assert 'Current local time and date' in out
 
         out, _ = vanilla.exec(['./tmp/build/simple/example-cpp'])
         assert 'Current date' in out
-    finally:
-        vanilla.stop()
