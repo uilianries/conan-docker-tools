@@ -1,26 +1,35 @@
 import pytest
-from fixtures.container import run_container
+from fixtures.expected import Version
+
+IMAGL_REF = 'imagl/0.2.1@'
 
 
+@pytest.mark.compiler('clang')
 @pytest.mark.service('deploy')
-def test_imagl(container, expected):
+def test_imagl_clang(container, expected):
     # imaGL library requires C++20 to build
-    if expected.compiler.name == 'clang' and expected.compiler.version.major < 10:
+    if expected.compiler.version.lazy_lt_semver(Version("10")):
         pytest.skip('Requires C++20 (clang >= 10')
-    elif expected.compiler.name == 'gcc' and expected.compiler.version.major < 9:
+
+    # Compile the project
+    with container.working_dir():
+        container.exec(['conan', 'install', IMAGL_REF, '--build', '-o', 'imagl:shared=True'])
+        container.exec(['conan', 'install', IMAGL_REF, '-g', 'deploy', '-o', 'imagl:shared=True'])
+        out, err = container.exec(['ldd', 'imagl/lib/libimaGL.so'])
+        assert 'libc++.so.1 => /usr/local/lib/libc++.so.1' in out
+
+
+@pytest.mark.compiler('gcc')
+@pytest.mark.service('deploy')
+@pytest.mark.parametrize("libcxx", ['libstdc++', 'libstdc++11'])
+def test_imagl_gcc(container, expected, libcxx):
+    if expected.compiler.version.lazy_lt_semver(Version("9")):
         pytest.skip('Requires C++20 (gcc >= 9')
 
-    stdout, stderr = container.bash(['/tmp/workingdir/standard/test_imagl.sh'])
-    assert '' == stdout
-    assert '' == stderr
-    assert 'Current local time and date' in stdout
-    assert 'Current date' in stdout
-
-    # Check we can run these executables in vanilla image
-    vanilla_img = f"{expected.distro.name}:{expected.distro.version}"
-    with run_container(vanilla_img, tmpdirname=container._tmpfolder) as vanilla:
-        out, _ = vanilla.exec(['./tmp/build/simple/example-c'])
-        assert 'Current local time and date' in out
-
-        out, _ = vanilla.exec(['./tmp/build/simple/example-cpp'])
-        assert 'Current date' in out
+    # Compile the project
+    with container.working_dir():
+        container.exec(['conan', 'install', IMAGL_REF, '--build', '-s', f'compiler.libcxx={libcxx}', '-o', 'imagl:shared=True'])
+        container.exec(['conan', 'install', IMAGL_REF, '-g', 'deploy', '-s', f'compiler.libcxx={libcxx}', '-o', 'imagl:shared=True'])
+        out, err = container.exec(['ldd', 'imagl/lib/libimaGL.so'])
+        assert 'libstdc++.so.6 => /usr/local/lib64/libstdc++.so.6' in out
+        assert 'libgcc_s.so.1 => /usr/local/lib64/libgcc_s.so' in out
