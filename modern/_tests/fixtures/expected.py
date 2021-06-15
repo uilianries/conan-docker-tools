@@ -8,8 +8,8 @@ import yaml
 
 @dataclass
 class Version:
-    full_version: str = None
-    major: str = None
+    full_version: str
+    major: str
     minor: str = None
     patch: str = None
 
@@ -26,11 +26,17 @@ class Version:
 
     def __str__(self):
         ret = f"{self.major}"
-        if self.minor:
+        if self.minor is not None:
             ret += f".{self.minor}"
-        if self.patch:
+        if self.patch is not None:
             ret += f".{self.patch}"
         return ret
+
+    def lazy_lt_semver(self, other):
+        lv1 = [int(v) for v in self.full_version.split(".")]
+        lv2 = [int(v) for v in other.full_version.split(".")]
+        min_length = min(len(lv1), len(lv2))
+        return lv1[:min_length] < lv2[:min_length]
 
 
 @dataclass

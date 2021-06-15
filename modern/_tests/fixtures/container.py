@@ -22,11 +22,15 @@ class DockerContainer:
         args += ["--name", self.name, self.image]
         subprocess.check_call(args)
 
-    def bash(self, bash_commands: list):
-        return self.exec(['/bin/bash', ] + bash_commands)
+    def bash(self, bash_commands: list, working_dir=None):
+        return self.exec(['/bin/bash', ] + bash_commands, working_dir)
 
-    def exec(self, commands: list):
-        args = ["docker", "exec", self.name] + commands
+    def exec(self, commands: list, working_dir=None):
+        args = ["docker", "exec"]
+        if working_dir:
+            args += ["-w", working_dir]
+        args += [self.name, ] + commands
+        print(f'>> {" ".join(args)}')
         process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
         return stdout.decode('utf-8'), stderr.decode('utf-8')
