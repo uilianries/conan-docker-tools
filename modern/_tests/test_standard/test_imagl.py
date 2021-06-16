@@ -16,7 +16,7 @@ def test_imagl_clang(container, expected):
         container.exec(['conan', 'install', IMAGL_REF, '--build', '-o', 'imagl:shared=True'])
         container.exec(['conan', 'install', IMAGL_REF, '-g', 'deploy', '-o', 'imagl:shared=True'])
         out, err = container.exec(['ldd', 'imagl/lib/libimaGL.so'])
-        assert 'libc++.so.1 => /usr/local/lib/libc++.so.1' in out
+        assert 'libc++.so.1 => /usr/local/lib/libc++.so.1' in out, f"out: '{out}' err: '{err}'"
 
 
 @pytest.mark.compiler('gcc')
@@ -31,5 +31,5 @@ def test_imagl_gcc(container, expected, libcxx):
         container.exec(['conan', 'install', IMAGL_REF, '--build', '-s', f'compiler.libcxx={libcxx}', '-o', 'imagl:shared=True'])
         container.exec(['conan', 'install', IMAGL_REF, '-g', 'deploy', '-s', f'compiler.libcxx={libcxx}', '-o', 'imagl:shared=True'])
         out, err = container.exec(['ldd', 'imagl/lib/libimaGL.so'])
-        assert 'libstdc++.so.6 => /usr/local/lib64/libstdc++.so.6' in out
-        assert 'libgcc_s.so.1 => /usr/local/lib64/libgcc_s.so' in out
+        assert 'libstdc++.so.6 => /usr/local/lib64/libstdc++.so.6' in out, f"out: '{out}' err: '{err}'"
+        assert 'libgcc_s.so.1 => /usr/local/lib64/libgcc_s.so' in out, f"out: '{out}' err: '{err}'"
