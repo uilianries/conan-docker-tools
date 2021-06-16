@@ -4,7 +4,7 @@ from fixtures.expected import Expected
 
 @pytest.mark.compiler('gcc')
 @pytest.mark.service('builder', 'deploy', 'conan')
-class TestGccCompiler:
+class TestGccGFortranCompiler:
 
     def test_version(self, container, expected: Expected):
         out, _ = container.exec(['gfortran', '--version'])

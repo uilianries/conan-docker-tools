@@ -19,7 +19,7 @@ def test_simple(container, expected):
     vanilla_img = f"{expected.distro.name}:{expected.distro.version}"
     with run_container(vanilla_img, tmpdirname=container._tmpfolder) as vanilla:
         with vanilla.working_dir(build_directory):
-            out, _ = vanilla.exec(['./example-c'])
+            out, err = vanilla.exec(['./example-c'])
             assert 'Current local time and date' in out, f"out: '{out}' err: '{err}'"
 
             out, err = vanilla.exec(['./example-cpp'])
